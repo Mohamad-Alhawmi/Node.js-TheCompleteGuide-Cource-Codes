@@ -17,12 +17,27 @@ const server = http.createServer( (req, res) =>{
 
     if(url === '/message' && method === 'POST')
     {
-        fs.writeFileSync('message.txt', 'Dummy') ;
-        res.statusCode = 302 ;
-        res.setHeader('Location', '/') ; // Status code of 302 stands for redirection.
+        const body = [] ;
         
-        return res.end() ;
+        req.on('data', (chunk) =>{
+            console.log(chunk) ;
+            body.push(chunk) ;
+        }) ;
+
+
+
+        req.on('end', () =>{
+            const parsedBody = Buffer.concat(body).toString() ;
+            const message = parsedBody.split('=')[1] ;
+            fs.writeFile('message.txt', message, (error) =>{
+                res.statusCode = 302 ;
+                res.setHeader('Location', '/') ; // Status code of 302 stands for redirection.
+                
+                return res.end() ;
+            }) ;
+        }) ;
     }
+
     console.log(req.url , req.method, req.headers) ;
     res.setHeader('Content-Type', 'text/html') ;
     res.write('<html>') ;
@@ -30,7 +45,6 @@ const server = http.createServer( (req, res) =>{
     res.write('<body><h1>Hello From my node.js Server!</h1></body>') ;
     res.write('</html>') ;
     res.end() ;
-  
 }) ;
 
 server.listen(3000) ;
