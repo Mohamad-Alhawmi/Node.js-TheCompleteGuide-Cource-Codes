@@ -1,49 +1,49 @@
-const fs = require('fs') ;
-
-const requestHandler = (req, res) =>
-{
+const requestHandler = (req, res) =>{
     const url = req.url ;
     const method = req.method ;
 
-    if(url === '/')
-{
-    res.write('<html>') ;
-    res.write('<head><title>Enter Message</title></head>') ;
-    res.write('<body><form action = "/message" method = "POST"><input type = "text" name = "message"><button type = "submit">Send</button></form></body>') ;
-    res.write('</html>') ;
-    
-    return res.end() ;
-}
+    if(url == '/')
+    {
+        res.setHeader('Content-Type', 'text/html') ;
+        res.write('<html>') ;
+        res.write('<title>First Assignment</title>') ;
+        res.write('<body><h1>Dummy Text</h1>') ;
+        res.write('<form method = "POST" action = "/create-user"><input name = "username" placeholder = "User Name" type = "text"></br>') ;
+        res.write('<button type = "submit">Submit</button></form></body>') ;
+        res.write('</html>') ;
 
-if(url === '/message' && method === 'POST')
-{
-    const body = [] ;
-    
-    req.on('data', (chunk) =>{
-        console.log(chunk) ;
-        body.push(chunk) ;
-    }) ;
+        return res.end() ;
+    }
 
+    if(url == '/users')
+    {
+        res.setHeader('Content-Type', 'text/html') ;
+        res.write('<html>') ;
+        res.write('<title>First Assignment</title>') ;
+        res.write('<body><ul><li>Mohamad</li><li>Hamzeh</li><li>Ali</li></ul></body>') ;
+        res.write('</html>') ;
 
+        return res.end() ;
+    }
 
-    req.on('end', () =>{
-        const parsedBody = Buffer.concat(body).toString() ;
-        const message = parsedBody.split('=')[1] ;
-        fs.writeFile('message.txt', message, (error) =>{
-            res.statusCode = 302 ;
-            res.setHeader('Location', '/') ; // Status code of 302 stands for redirection.
-            
-            return res.end() ;
+    if(url === '/create-user' && method === 'POST')
+    {   
+        const body = [] ;
+
+        req.on('data', (chunk) =>{
+            body.push(chunk) ;
         }) ;
-    }) ;
+
+        req.on('end', () =>{
+            const parsedBody = Buffer.concat(body).toString() ;
+            console.log(parsedBody.split('=')[1]) ;
+        }) ;
+
+        res.statusCode = 302 ;
+        res.setHeader('Location', '/') ; // Status code of 302 stands for redirection.
+
+        return res.end() ;
+    }
 }
 
-res.setHeader('Content-Type', 'text/html') ;
-res.write('<html>') ;
-res.write('<head><title>My First Page</title></head>') ;
-res.write('<body><h1>Hello From my node.js Server!</h1></body>') ;
-res.write('</html>') ;
-res.end() ;
-}
-
-module.exports = requestHandler ;
+module.exports = requestHandler ; 
