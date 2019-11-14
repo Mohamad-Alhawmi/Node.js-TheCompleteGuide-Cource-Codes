@@ -2,19 +2,16 @@ const express = require('express') ;
 
 const app = express() ;
 
-app.use('/', (req, res, next) =>{  
-    console.log("Always runs!") ;
-    next() ;
+app.use('/add-product', (req, res, next) =>{      
+    res.send('<form action="/product" method="POST"><input type="test" name = "title"><button>Submit</button><form>') ;
 }) ;
 
-app.use('/add-product', (req, res) =>{      
-    console.log("In another middleware!") ;
-    res.send('<h1>Add product page!</h1>') ;
+app.use('/product', (req, res, next) =>{      
+    res.redirect('/') ;
 }) ;
 
 app.use('/', (req, res) =>{  
-    console.log("Hi!") ;
     res.send('<h1>Hello from Express!</h1>') ;
-}) ;
+}) ; 
 
 app.listen(3000) ; 
