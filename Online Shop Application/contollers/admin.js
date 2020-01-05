@@ -34,7 +34,7 @@ exports.getEditProduct = (req, res, next) =>
     const prodId = req.params.productId ;
 
     Product.findById(prodId, product =>{
-        if(!editMode)
+        if(!product)
         {
             return res.redirect('/') ;
         }
@@ -80,3 +80,9 @@ exports.getProducts = (req, res, next) =>
         }) ;
     }) ;
 } ;
+
+exports.postDeleteProduct = (req, res, next) =>{
+    const prodId = req.body.productId ;
+    Product.deleteById(prodId) ;
+    res.redirect('/admin/products') ;
+}
