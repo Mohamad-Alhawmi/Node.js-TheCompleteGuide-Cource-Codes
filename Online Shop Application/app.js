@@ -7,7 +7,7 @@ const errorController = require('./contollers/error') ; ;
 
 const adminRoutes = require('./routes/admin') ;
 const shopRoutes = require('./routes/shop') ;
-const db = require('./config/database') ;
+const sequelize = require('./config/database') ;
 
 const app = express() ;
         
@@ -22,7 +22,17 @@ app.use(shopRoutes) ;
 
 app.use(errorController.get404) ;
 
-app.listen(3000) ; 
+sequelize.sync()
+    .then((result) => 
+    {
+        //console.log(result);
+        app.listen(3000) ; 
+    })
+    .catch((err) => 
+    {
+        console.log(err) ;
+    }) ;
+
 
 
 
