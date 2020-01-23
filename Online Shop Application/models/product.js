@@ -7,10 +7,11 @@ const Product = sequelize.define(
     {
         id : 
         {
-            type : Sequelize.INTEGER,
+            type : Sequelize.INTEGER(10).UNSIGNED,
             autoIncrement : true,
             allowNull : false,
-            primaryKey : true
+            primaryKey : true,
+            unique: true
         },
 
         title : Sequelize.STRING,
